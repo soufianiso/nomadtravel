@@ -4,12 +4,10 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"log"
 	"log/slog"
 
 	// "log/slog"
 	"net"
-	"os"
 	"user/configs"
 	"user/internal/client"
 	"user/internal/server"
@@ -32,11 +30,7 @@ func main(){
 	flag.Parse()
 
 // logging
-	handlerOpts := &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	}
-	logger := slog.New(slog.NewTextHandler(os.Stderr, handlerOpts))
-	slog.SetDefault(logger)
+	logger := slog.Default()
 
 // grpc listening
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s",*serverAdd))
@@ -44,7 +38,7 @@ func main(){
 	if err != nil{
 		slog.Error("", "failed to listen:", err)
 	}
-	slog.Info("grpc listening", "Listen on",*serverAdd)
+	logger.Info("grpc","grpc listening: ", *serverAdd)
 
 // Postgres Database 
 	conn := fmt.Sprintf("host=%s port=%s user=%s " +
@@ -54,13 +48,13 @@ func main(){
 	db, err := sql.Open("postgres",conn)	
 	defer db.Close()
 	if err != nil{
-		slog.Error("", "postgres connection", err)
+		logger.Error("", "postgres connection", err)
 	}
 
 	if err := db.Ping() ; err != nil{
-		slog.Error("", "postgres ping", err)
+		logger.Error("", "postgres ping", err)
 	}
-	slog.Info("postgres listening", "listen on" , *DBPort)
+	logger.Info("postgres listening", "listen on" , *DBPort)
 
 	// Grpc Auth client
 	authClient := client.NewAuthClient(string(*authAdd))
@@ -68,7 +62,7 @@ func main(){
 	// Grpc User Server
 	s := server.NewServer(logger, db, authClient)
 	if err := s.Serve(lis); err != nil{
-		log.Fatalf("failed to server %v ", err)
+		logger.Error("failed to server %v", err)
 	}
 
 

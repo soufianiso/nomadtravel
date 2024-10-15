@@ -6,7 +6,6 @@ import (
 	pb "user/api/proto/user"
 	"user/internal/service"
 	"user/internal/storage"
-
 	"google.golang.org/grpc"
 )
 
