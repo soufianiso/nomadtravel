@@ -61,19 +61,18 @@ func main(){
 	// Grpc Auth client
 	authClient := client.NewAuthClient(string(*authAdd))
 
+	s := server.NewServer(logger, db, authClient)
 	var wg  sync.WaitGroup
 	
 	wg.Add(1)
 	go func(){
 		defer wg.Done()
-		s := server.NewServer(logger, db, authClient)
 		if err := s.Serve(lis); err != nil{
 			logger.Error("failed to server %v", err)
 		}
 	}()
 	wg.Wait()
 }
-	// Grpc User Server
 
 
 
