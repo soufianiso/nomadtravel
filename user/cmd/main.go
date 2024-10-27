@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
+	"sync"
 
 	// "log/slog"
 	"net"
@@ -40,6 +41,7 @@ func main(){
 	}
 	logger.Info("grpc","grpc listening: ", *serverAdd)
 
+
 // Postgres Database 
 	conn := fmt.Sprintf("host=%s port=%s user=%s " +
 	    "password=%s dbname=%s sslmode=disable",
@@ -59,18 +61,27 @@ func main(){
 	// Grpc Auth client
 	authClient := client.NewAuthClient(string(*authAdd))
 
-	// Grpc User Server
-	s := server.NewServer(logger, db, authClient)
-	if err := s.Serve(lis); err != nil{
-		logger.Error("failed to server %v", err)
-	}
-
-
-
-
-
-
-
-
-
+	var wg  sync.WaitGroup
+	
+	wg.Add(1)
+	go func(){
+		defer wg.Done()
+		s := server.NewServer(logger, db, authClient)
+		if err := s.Serve(lis); err != nil{
+			logger.Error("failed to server %v", err)
+		}
+	}()
+	wg.Wait()
 }
+	// Grpc User Server
+
+
+
+
+
+
+
+
+
+
+
