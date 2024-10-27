@@ -21,9 +21,12 @@ func SetUser(r *mux.Router, user pb.UserClient) {
 func handleRegister(user pb.UserClient) http.Handler{
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var u types.User
-		json.NewDecoder(r.Body).Decode(&u)
-
+		if err := json.NewDecoder(r.Body).Decode(&u) ; err != nil{
+			fmt.Println("error")
+			return 
+		}
 		log.Println("step ov verification works")
+		 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 		res , err := user.RegisterUser(ctx, &pb.RegisterUserRequest{FirstName: u.FirstName ,LastName: u.LastName, Email: u.Email, Password: u.Password})

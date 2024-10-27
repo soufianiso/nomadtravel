@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	// "net"
 	// "log"
 	pb "api-gateway/api/proto/user"
@@ -22,25 +24,39 @@ var (
 	userAddr = flag.String("address of grcpUserMicro ",configs.Envs.UserMicroservicePort,"this is server grpc server of the user microservice")
 )
 
-
 func main(){
+	
+	var userMicroClient pb.UserClient
+	var wg sync.WaitGroup
 	// Set up a connection to the server.
-	conn, err := grpc.NewClient(fmt.Sprintf(":%s",*userAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
 
-	userMicroClient := pb.NewUserClient(conn)
+	wg.Add(2)
+	go func() {
+		defer wg.Done() 
 
-	s := server.NewGatewayServer(userMicroClient)
+		conn, err := grpc.NewClient(fmt.Sprintf(":%s",*userAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Fatalf("did not connect: %v", err)
+		}
+		defer conn.Close()
 
-	app := http.Server{
-		Addr: fmt.Sprintf(":%s",*GatewayAddr),
-		Handler: s,
-	}
+		userMicroClient = pb.NewUserClient(conn)
+	}()
 
-	log.Printf("api gateway listening to addresss:%s", *GatewayAddr)
-	app.ListenAndServe()
+	go func() {
+		defer wg.Done()
+		 
+		s := server.NewGatewayServer(userMicroClient)
+
+		app := http.Server{
+			Addr: fmt.Sprintf(":%s",*GatewayAddr),
+			Handler: s,
+		}
+
+		log.Printf("api gateway listening to addresss:%s", *GatewayAddr)
+		app.ListenAndServe()
+	}()
+
+	wg.Wait()
 }
 
