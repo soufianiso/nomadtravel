@@ -26,33 +26,27 @@ var (
 
 func main(){
 	
-	var userMicroClient pb.UserClient
 	var wg sync.WaitGroup
 	// Set up a connection to the server.
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done() 
 
-		conn, err := grpc.NewClient(fmt.Sprintf(":%s",*userAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
-		if err != nil {
-			log.Fatalf("did not connect: %v", err)
-		}
-		defer conn.Close()
+	conn, err := grpc.NewClient(fmt.Sprintf(":%s",*userAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
 
-		userMicroClient = pb.NewUserClient(conn)
-	}()
+	userMicroClient := pb.NewUserClient(conn)
+	s := server.NewGatewayServer(userMicroClient)
 
+	app := http.Server{
+		Addr: fmt.Sprintf(":%s",*GatewayAddr),
+		Handler: s,
+	}
+
+	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		 
-		s := server.NewGatewayServer(userMicroClient)
-
-		app := http.Server{
-			Addr: fmt.Sprintf(":%s",*GatewayAddr),
-			Handler: s,
-		}
-
 		log.Printf("api gateway listening to addresss:%s", *GatewayAddr)
 		app.ListenAndServe()
 	}()

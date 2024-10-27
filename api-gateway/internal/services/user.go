@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -29,12 +30,17 @@ func handleRegister(user pb.UserClient) http.Handler{
 		 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
-		res , err := user.RegisterUser(ctx, &pb.RegisterUserRequest{FirstName: u.FirstName ,LastName: u.LastName, Email: u.Email, Password: u.Password})
+		
+		res , err := user.RegisterUser(ctx, &pb.RegisterUserRequest{
+			FirstName: u.FirstName ,
+			LastName: u.LastName, 
+			Email: u.Email, 
+			Password: u.Password,
+		})
 		if err != nil{
 			fmt.Println(err)
 		}
 		fmt.Println("succeess")
 		json.NewEncoder(w).Encode(res.GetId())
-	
 	})
 }
