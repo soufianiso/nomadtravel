@@ -4,13 +4,13 @@ import (
 	pb "api-gateway/api/proto/user"
 	"api-gateway/internal/types"
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
+	// "sync"
 	"time"
 
+	"api-gateway/internal/utils"
 	"github.com/gorilla/mux"
 )
 
@@ -22,7 +22,7 @@ func SetUser(r *mux.Router, user pb.UserClient) {
 func handleRegister(user pb.UserClient) http.Handler{
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var u types.User
-		if err := json.NewDecoder(r.Body).Decode(&u) ; err != nil{
+		if err := utils.Decode(r, u) ; err != nil{
 			fmt.Println("error")
 			return 
 		}
@@ -40,7 +40,6 @@ func handleRegister(user pb.UserClient) http.Handler{
 		if err != nil{
 			fmt.Println(err)
 		}
-		fmt.Println("succeess")
-		json.NewEncoder(w).Encode(res.GetId())
+		utils.Encode(w,r,200,res.GetId())
 	})
 }
