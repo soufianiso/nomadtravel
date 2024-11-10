@@ -33,11 +33,11 @@ func (s *Userservice) RegisterUser(ctx context.Context, req *pb.RegisterUserRequ
 	if err !=  nil{
 		s.log.Info("RegisterUser", "Failed to retrieve user by Email (%s)", req.GetFirstName())
 		s.log.Error("RegisterUser", "the error", err)
-		return nil, err
 	}
+
 	s.log.Info("RegisterUser", "Create the succesfully", req.GetFirstName())
-	response := &pb.RegisterUserResponse{Id: req.GetId()}
-	return response , nil
+	return  &pb.RegisterUserResponse{Id: req.GetFirstName()}, nil
+
 }
 
 

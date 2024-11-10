@@ -11,10 +11,10 @@ import (
 
 
 func NewServer(log *slog.Logger , db *sql.DB, authClient pb.UserClient ) *grpc.Server{
-	s := grpc.NewServer()
 	userStore := storage.NewUserStorage(db)
 	userservice := service.NewUserService(log, userStore, authClient)
 
+	s := grpc.NewServer()
 	pb.RegisterUserServer(s, userservice)
 	return s  
 }

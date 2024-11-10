@@ -28,9 +28,6 @@ var (
 )
 
 func main(){
-	flag.Parse()
-
-// logging
 	logger := slog.Default()
 
 // grpc listening
@@ -59,7 +56,7 @@ func main(){
 	logger.Info("postgres listening", "listen on" , *DBPort)
 
 	// Grpc Auth client
-	authClient := client.NewAuthClient(string(*authAdd))
+	authClient := client.NewAuthClient(fmt.Sprintf("%s",*authAdd))
 
 	s := server.NewServer(logger, db, authClient)
 	var wg  sync.WaitGroup
@@ -68,9 +65,10 @@ func main(){
 	go func(){
 		defer wg.Done()
 		if err := s.Serve(lis); err != nil{
-			logger.Error("failed to server %v", err)
+			logger.Error("","failed to server", err)
 		}
 	}()
+
 	wg.Wait()
 }
 
