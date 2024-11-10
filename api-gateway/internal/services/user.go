@@ -26,7 +26,7 @@ func handleRegister(user pb.UserClient) http.Handler{
 			fmt.Println("error")
 			return 
 		}
-		log.Println("step ov verification works")
+		log.Println("the step of verification works")
 		 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
@@ -40,6 +40,6 @@ func handleRegister(user pb.UserClient) http.Handler{
 		if err != nil{
 			fmt.Println(err)
 		}
-		utils.Encode(w,r,200,res.GetId())
+		utils.Encode(w,r ,200, res.GetId())
 	})
 }
