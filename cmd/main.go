@@ -7,14 +7,14 @@ import (
 
 	// "net"
 	// "log"
-	pb "api-gateway/api/proto/user"
-	"api-gateway/internal/server"
+	pb "github.com/soufianiso/nomadtravel/api-gateway/api/v1/proto/user"
+	"github.com/soufianiso/nomadtravel/api-gateway/internal/server"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
 	// "fmt"
-	"api-gateway/configs"
+	"github.com/soufianiso/nomadtravel/api-gateway/configs"
 	"log"
 	"net/http"
 )

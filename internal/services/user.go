@@ -1,8 +1,8 @@
 package services
 
 import (
-	pb "api-gateway/api/proto/user"
-	"api-gateway/internal/types"
+	pb "github.com/soufianiso/nomadtravel/api-gateway/api/v1/proto/user"
+	"github.com/soufianiso/nomadtravel/api-gateway/internal/types"
 	"context"
 	"fmt"
 	"log"
@@ -10,7 +10,7 @@ import (
 	// "sync"
 	"time"
 
-	"api-gateway/internal/utils"
+	"github.com/soufianiso/nomadtravel/api-gateway/internal/utils"
 	"github.com/gorilla/mux"
 )
 
