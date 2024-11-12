@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 	"github.com/soufianiso/nomadtravel/movies/configs"
+	"github.com/soufianiso/nomadtravel/movies/internal/server"
 	"net"
 	"os"
 	"sync"
@@ -19,14 +20,13 @@ import (
 )
 
 var (
-
-
-	postgresHost =  flag.String("postgres onnection",configs.Envs.DB_HOST, "postgres host")
-	postgresName =  flag.String("postgres nnection",configs.Envs.DBName, "postgres name")
-	postgresPort =  flag.String("postgres nection",configs.Envs.DB_PORT, "postgres port")
-	postgresUser =  flag.String("postgres ion",configs.Envs.DBUser, "postgres User")
-	postgresPassword =  flag.String("postges connection",configs.Envs.DBPassword, "postgres Password")
-	serverPort =  flag.String("server port",configs.Envs.MoviesMicroservicePort, "Movie microservice port")
+	serverAddr  = flag.String("moviesAddr", configs.Envs.MoviesMicroservicePort, "Address for the Movies microservice")
+	userAddr    = flag.String("userAddr", configs.Envs.UserMicroservicePort, "Address for the User microservice")
+	postgresHost =  flag.String("postgresAddr",configs.Envs.DB_HOST, "postgres host")
+	postgresName =  flag.String("postgresName",configs.Envs.DBName, "postgres name")
+	postgresPort =  flag.String("postgresPort",configs.Envs.DB_PORT, "postgres port")
+	postgresUser =  flag.String("postgresUser",configs.Envs.DBUser, "postgres User")
+	postgresPassword =  flag.String("postgesPassword",configs.Envs.DBPassword, "postgres Password")
 
 )
 
@@ -37,50 +37,42 @@ func main(){
 
 
 	// litening on port 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s",*serverPort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s",*serverAddr))
 	if err != nil{
-		log.Error("ss",err)
+		log.Error("error to open connection maybe the port is being used","Error",err)
 	}
+	
 
 	conn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		*postgresHost, *postgresPort, *postgresUser, *postgresPassword, *postgresName)
 
 	db, err := sql.Open("postgres",conn)
 	if err != nil{
-		log.Error("", "can't connect to database s",err)
+		log.Error("can't connect to database s","Error",err)
 		os.Exit(1)
 	}
 
 	if err = db.Ping() ;  err != nil{
-		fmt.Println("can't ping ")
-		os.Exit(1)
+		log.Error("can't ping postgres",)
 	}
 
-
-	
-	// not yet created just a pseodocode
-	// server its the struct that has the unimplemented proto buf pb.Unimplemented
-	server := server.NewServer()
+	log.Info("postgres connected successfully on port ", "success", fmt.Sprintf("%s",*postgresPort))
 
 	grpcConn := grpc.NewServer()
+	s := server.NewServer(log, db, grpcConn) 
 
-	pb.RegisterMoviesServer(grpcConn,server)
+ 	var wg sync.WaitGroup
 
-	var wg sync.WaitGroup
 	wg.Add(1)
 	go func(){
 		defer wg.Done()
-		if err := grpcConn.Serve(lis) ; err != nil{
-			log.Error("","can't serve",err)
+		log.Info("server listening on port","server Address",*serverAddr)
+		if err := s.Serve(lis); err != nil{
+			log.Error("Failed to serve","Error",err)
 		}
 	}()
-	
+	wg.Wait()
 
-
-	// Now I need to established a grpc connection
-
-	
-	// app := server.NewServer(log,db)
 }
 
 

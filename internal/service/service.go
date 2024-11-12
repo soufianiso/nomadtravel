@@ -3,40 +3,36 @@ package service
 import (
 	"context"
 	"log/slog"
-	pb "user/api/proto/user"
-	"user/internal/storage"
+	moviespb "github.com/soufianiso/nomadtravel/movies/api/v1/proto/movies"
+	"github.com/soufianiso/nomadtravel/movies/internal/storage"
 	// "user/internal/types"
 )
 
-type Userservice struct {
-	pb.UnimplementedUserServer
+type MoviesService struct {
+	moviespb.UnimplementedMoviesServer
 	log *slog.Logger 
 	// interface of storage
 	store storage.Store
-	userClient pb.UserClient
 }
 
 
 
 
-func NewUserService(log *slog.Logger , store storage.Store, userClient pb.UserClient ) *Userservice{
-	return &Userservice{
+func NewUserService(log *slog.Logger , store storage.Store) *MoviesService{
+	return &MoviesService{
 		log : log,
 		store: store,
-		userClient: userClient,
 
 	}
 }
 
-func (s *Userservice) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) (*pb.RegisterUserResponse, error) {
-	err := s.store.CreateUser(req)
+func (s *MoviesService) ListMovies(ctx context.Context, req *moviespb.ListMoviesRequest) (*moviespb.ListMoviesResponse, error) {
+	err := s.store.GetMovies(req)
 	if err !=  nil{
-		s.log.Info("RegisterUser", "Failed to retrieve user by Email (%s)", req.GetFirstName())
-		s.log.Error("RegisterUser", "the error", err)
+		
 	}
 
-	s.log.Info("RegisterUser", "Create the succesfully", req.GetFirstName())
-	return  &pb.RegisterUserResponse{Id: req.GetFirstName()}, nil
+	return  nil, nil
 
 }
 

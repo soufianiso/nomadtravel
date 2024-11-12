@@ -9,7 +9,6 @@ import (
 )
 
 type Config struct {
-	PublicHost             string
 	UserMicroservicePort   string
 	AuthMicroservicePort   string
 	MoviesMicroservicePort   string
@@ -29,7 +28,6 @@ func initConfig() Config {
 	godotenv.Load()
 
 	return Config{
-		PublicHost:             getEnv("PUBLIC_HOST", "http://localhost"),
 		UserMicroservicePort:	getEnv("USER_MICROSERVICE_PORT", "50051"),
 		AuthMicroservicePort:	getEnv("AUTH_MICROSERVICE_PORT", "50052"),
 		MoviesMicroservicePort:	getEnv("MOVIES_MICROSERVICE_PORT", "50053"),
