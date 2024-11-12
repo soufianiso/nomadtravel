@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
-	"movies/configs"
+	"github.com/soufianiso/nomadtravel/movies/configs"
 	"net"
 	"os"
 	"sync"

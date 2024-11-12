@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package movies;
+option go_package = "v1/proto/movies";
+
+service Movies {
+    rpc ListMovies(ListMoviesRequest) returns (ListMoviesResponse);
+}
+
+message Movie{
+    int32 id = 1;
+    string original_title = 2;
+    string original_language = 3;
+    string overview = 4;
+    string release_date =  5;
+    bool adult =  6;
+}
+
+// ListMovies
+message ListMoviesRequest {
+    int32 page = 1;        
+    int32 page_size = 2;   
+}
+
+message ListMoviesResponse {
+    repeated Movie movies = 1;
+    int32 total_count = 2; 
+}
+
