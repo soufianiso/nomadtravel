@@ -15,7 +15,7 @@ func NewServer(log *slog.Logger ,db *sql.DB, grpcServer *grpc.Server) *grpc.Serv
 	moviesStore := storage.NewMoviesStorage(db)
 
 	// initiliaze new movies service 
-	moviesService := service.NewUserService(log, moviesStore)
+	moviesService := service.NewMoviesService(log, moviesStore)
 
 	moviespb.RegisterMoviesServer(grpcServer, moviesService)
 

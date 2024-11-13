@@ -18,7 +18,7 @@ type MoviesService struct {
 
 
 
-func NewUserService(log *slog.Logger , store storage.Store) *MoviesService{
+func NewMoviesService(log *slog.Logger , store storage.Store) *MoviesService{
 	return &MoviesService{
 		log : log,
 		store: store,
@@ -27,12 +27,13 @@ func NewUserService(log *slog.Logger , store storage.Store) *MoviesService{
 }
 
 func (s *MoviesService) ListMovies(ctx context.Context, req *moviespb.ListMoviesRequest) (*moviespb.ListMoviesResponse, error) {
-	err := s.store.GetMovies(req)
+	movies, err := s.store.GetMovies(ctx, req)
 	if err !=  nil{
+		s.log.Error("something went wrong in GetMovies query","Err",err)
 		
 	}
+	return &moviespb.ListMoviesResponse{ Movies: movies} , err
 
-	return  nil, nil
 
 }
 
