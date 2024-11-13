@@ -32,7 +32,7 @@ func initConfig() Config {
 		ApiGatewayPort:			getEnv("PORT", "8000"),
 		UserMicroservicePort:	getEnv("USER_MICROSERVICE_PORT", "50051"),
 		// AuthMicroservicePort:	getEnv("AUTH_MICROSERVICE_PORT", "50052"),
-		MoviesMicroservicePort:	getEnv("MOVIE_MICROSERVICE_PORT", "50052"),
+		MoviesMicroservicePort:	getEnv("MOVIE_MICROSERVICE_PORT", "50053"),
 		DBUser:                 getEnv("DB_USER", "postgres"),
 		DBPassword:             getEnv("B_PASSWORD", "postgres"),
 		DBAddress:              fmt.Sprintf("%s:%s", getEnv("DB_HOST", "127.0.0.1"), getEnv("DB_PORT", "5432")),

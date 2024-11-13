@@ -9,6 +9,7 @@ import (
 	userpb "github.com/soufianiso/nomadtravel/api-gateway/api/v1/proto/user"
 	"github.com/soufianiso/nomadtravel/api-gateway/internal/services"
 	"github.com/soufianiso/nomadtravel/api-gateway/internal/utils"
+	// "github.com/soufianiso/nomadtravel/api-gateway/internal/utils"
 )
 
 
@@ -16,15 +17,15 @@ import (
 
 func NewGatewayServer(log *slog.Logger, userService userpb.UserClient, moviesService moviespb.MoviesClient) http.Handler{
 	router := mux.NewRouter()
-	router = router.PathPrefix("/api/v1").Subrouter()
+	apirouter := router.PathPrefix("/api/v1").Subrouter()
 
-	services.SetUser(router, log, userService)		
-	services.SetMovies(router, log, moviesService)		
+	services.SetUser(apirouter, log, userService)		
+	services.SetMovies(apirouter, log, moviesService)		
 	
 	var handler http.Handler
 
 	// Top Level Middlewares
-	handler = utils.CORSMiddleware(router)
+	handler = utils.CORSMiddleware(apirouter)
 
 	return handler 
 
