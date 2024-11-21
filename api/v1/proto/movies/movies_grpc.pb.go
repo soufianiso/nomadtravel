@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Movies_ListMovies_FullMethodName = "/movies.Movies/ListMovies"
+	Movies_ShowMovie_FullMethodName  = "/movies.Movies/ShowMovie"
 )
 
 // MoviesClient is the client API for Movies service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MoviesClient interface {
 	ListMovies(ctx context.Context, in *ListMoviesRequest, opts ...grpc.CallOption) (*ListMoviesResponse, error)
+	ShowMovie(ctx context.Context, in *ShowMovieRequest, opts ...grpc.CallOption) (*ShowMovieResponse, error)
 }
 
 type moviesClient struct {
@@ -47,11 +49,22 @@ func (c *moviesClient) ListMovies(ctx context.Context, in *ListMoviesRequest, op
 	return out, nil
 }
 
+func (c *moviesClient) ShowMovie(ctx context.Context, in *ShowMovieRequest, opts ...grpc.CallOption) (*ShowMovieResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ShowMovieResponse)
+	err := c.cc.Invoke(ctx, Movies_ShowMovie_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MoviesServer is the server API for Movies service.
 // All implementations must embed UnimplementedMoviesServer
 // for forward compatibility.
 type MoviesServer interface {
 	ListMovies(context.Context, *ListMoviesRequest) (*ListMoviesResponse, error)
+	ShowMovie(context.Context, *ShowMovieRequest) (*ShowMovieResponse, error)
 	mustEmbedUnimplementedMoviesServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedMoviesServer struct{}
 
 func (UnimplementedMoviesServer) ListMovies(context.Context, *ListMoviesRequest) (*ListMoviesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListMovies not implemented")
+}
+func (UnimplementedMoviesServer) ShowMovie(context.Context, *ShowMovieRequest) (*ShowMovieResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowMovie not implemented")
 }
 func (UnimplementedMoviesServer) mustEmbedUnimplementedMoviesServer() {}
 func (UnimplementedMoviesServer) testEmbeddedByValue()                {}
@@ -104,6 +120,24 @@ func _Movies_ListMovies_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Movies_ShowMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowMovieRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MoviesServer).ShowMovie(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Movies_ShowMovie_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MoviesServer).ShowMovie(ctx, req.(*ShowMovieRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Movies_ServiceDesc is the grpc.ServiceDesc for Movies service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var Movies_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListMovies",
 			Handler:    _Movies_ListMovies_Handler,
+		},
+		{
+			MethodName: "ShowMovie",
+			Handler:    _Movies_ShowMovie_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

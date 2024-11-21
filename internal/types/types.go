@@ -1,26 +1,29 @@
 package types
 
 import (
-	"time"
 )
 
 type MoviePageNumber int
-const MovieSize = 20
+const MovieSize = 24
 
-type User struct {
+type UserRegister struct {
 	ID        int       `json:"id"`
-	FirstName string    `json:"firstname"`
-	LastName  string    `json:"lastname"`
+	Name string    `json:"firstname"`
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"createdAt"`
 }
 
 type Movie struct {
-	ID        int       `json:"id"`
-	OriginalTitle string    `json:"original_title"`
-	OriginalLanguage  string    `json:"original_Language"`
-	Overview     string    `json:"overview"`
-	Release_date  string    `json:"release_date"`
-	Adult  string    `json:"adult"`
+	ID               int    `json:"id"`
+	OriginalTitle    string `json:"original_title"`
+	OriginalLanguage string `json:"original_language"`
+	Overview         string `json:"overview"`
+	ReleaseDate      string `json:"release_date"`
+	Adult            bool   `json:"adult"`
+	PosterPath       string `json:"poster_path"`
+}
+
+type UserLogin struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
 }

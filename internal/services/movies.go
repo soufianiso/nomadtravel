@@ -16,19 +16,19 @@ import (
 
 func SetMovies(r *mux.Router, logger *slog.Logger, moviesService moviespb.MoviesClient) {
 	// r.Handle("movies",handleListMovies(logger, moviesService)).Methods("GET")
-	r.Handle("/movies/{id}",handleMoviesByPage(logger, moviesService)).Methods("GET")
+	r.Handle("/movies",handleMoviesByPage(logger, moviesService)).Methods("GET")
 	r.Handle("/movie/{id}",handleMovieByPage(logger, moviesService)).Methods("GET")
 }
 
 
 func handleMoviesByPage(log *slog.Logger, movies moviespb.MoviesClient) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter,  r *http.Request){
-		vars := mux.Vars(r)
-		id := vars["id"]
-		idstr , err := strconv.ParseInt(id, 10, 32)
+		q := r.URL.Query().Get("page")
+		idstr , err := strconv.ParseInt(q, 10, 32)
 		if err != nil{
-			log.Error("the id page of movies is not an integer","Error",err)
+			log.Error("the page number incorrect","url", r.URL.String())
 			utils.Encode(w,r,500, errors.New("internal errors"))
+			return 
 		}
 
 		page := int32(idstr)
@@ -42,9 +42,11 @@ func handleMoviesByPage(log *slog.Logger, movies moviespb.MoviesClient) http.Han
 			log.Error("Failed to retireve movies from MoviesMicroService", "Error", err)
 		}
 
-		if err := utils.Encode(w, r, 200, res ) ; err != nil{
+		if err := utils.Encode(w, r, 200, res) ; err != nil{
 			log.Error("Failed to Encode movies", "Error", err)
 		}
+		log.Info("Sent the movies successfully", "requestID",r.Context().Value("requestID"))
+
 
 	})
 }
@@ -58,8 +60,9 @@ func handleMoviesByPage(log *slog.Logger, movies moviespb.MoviesClient) http.Han
 
 
 func handleMovieByPage(log *slog.Logger,  movies moviespb.MoviesClient) http.Handler{
-	return http.HandlerFunc(func(w http.ResponseWriter,r *http.Request){
 
+	return http.HandlerFunc(func(w http.ResponseWriter,r *http.Request){
+		
 
 	})
 }

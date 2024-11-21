@@ -11,8 +11,7 @@ service User {
 // Register
 message RegisterUserRequest {
     string id = 1;
-    string FirstName = 2;
-    string LastName = 3;
+    string Name = 2;
     string Email =  4;
     string Password =  5;
 }
@@ -30,5 +29,7 @@ message LoginUserRequest {
 
 message LoginUserResponse {
     string id = 1;
+    string Email = 2;
+    string Token = 3;
 }
 

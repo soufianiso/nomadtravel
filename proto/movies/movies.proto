@@ -5,6 +5,7 @@ option go_package = "v1/proto/movies";
 
 service Movies {
     rpc ListMovies(ListMoviesRequest) returns (ListMoviesResponse);
+    rpc ShowMovie(ShowMovieRequest) returns (ShowMovieResponse);
 }
 
 message Movie{
@@ -14,6 +15,7 @@ message Movie{
     string overview = 4;
     string release_date =  5;
     bool adult =  6;
+    string poster_path = 7;
 }
 
 // ListMovies
@@ -27,3 +29,12 @@ message ListMoviesResponse {
     int32 total_count = 2; 
 }
 
+
+// ShowMovies
+message ShowMovieRequest {
+    int32 id = 1;        
+}
+
+message ShowMovieResponse {
+    Movie movie = 1;
+}

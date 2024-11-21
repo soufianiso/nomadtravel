@@ -31,20 +31,20 @@ var (
 
 func main(){
 	flag.Parse()
-	log := slog.Default()
+	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
 	userConn, err := grpc.NewClient(fmt.Sprintf(":%s",*userAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Error("maybe the port already used","error",err)
+		log.Error("Can't init gRPC client", "Client", "User", "Error",err)
 	}
 	defer userConn.Close()
 
 	moviesConn, err := grpc.NewClient(fmt.Sprintf(":%s",*moviesAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Error("maybe the port already used")
+		log.Error("Can't init gRPC client", "Client", "Movies", "Error",err)
 	}
 	defer moviesConn.Close()
 
@@ -69,7 +69,6 @@ func main(){
 		defer wg.Done()
 		log.Info("HTTP server starting", "address", app.Addr)
 		if err := app.ListenAndServe() ; err != nil{
-			log.Error("Failed to start the server", "error", err)
 		}
 	}()
 
@@ -77,17 +76,17 @@ func main(){
 	go func(){
 		defer wg.Done()
 		<-ctx.Done()
-		log.Info("shutting down server...")
+		log.Info("shutting down server...", "address", app.Addr)
 
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
 		// Gracefully shut down the server
 		if err := app.Shutdown(shutdownCtx); err != nil {
-			log.Error("error shutting down http server", "error", err)
+			log.Error("can't shutdown the server", "address", app.Addr)
 		}
 
-		log.Info("server shut down gracefully")
+		log.Info("the Server Shute Down Successfully", "address", app.Addr)
 	}()
 
 	wg.Wait()

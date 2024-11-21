@@ -3,6 +3,7 @@ module github.com/soufianiso/nomadtravel/api-gateway
 go 1.23.2
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
 	github.com/swaggo/swag v1.16.4
