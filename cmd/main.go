@@ -33,7 +33,7 @@ var (
 func main(){
 	
 	flag.Parse()
-	log := slog.Default()
+	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
 
 	// litening on port 

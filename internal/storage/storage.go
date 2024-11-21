@@ -29,7 +29,7 @@ func(s *Storage) GetMovies(ctx context.Context , req *moviespb.ListMoviesRequest
 	offset := (page - 1) * pageSize
 
 	rows, err := s.db.QueryContext(ctx, 
-		`SELECT original_title, original_language, overview, release_date, adult 
+		`SELECT original_title, original_language, overview, release_date,  adult, poster_path 
 		FROM movies 
 		ORDER BY original_title 
 		LIMIT $1 OFFSET $2`, pageSize, offset) 
@@ -41,7 +41,7 @@ func(s *Storage) GetMovies(ctx context.Context , req *moviespb.ListMoviesRequest
 
 	for rows.Next(){
 		var movie moviespb.Movie
-		if err := rows.Scan(&movie.OriginalTitle, &movie.OriginalLanguage, &movie.Overview, &movie.ReleaseDate, &movie.Adult); err != nil {
+		if err := rows.Scan(&movie.OriginalTitle, &movie.OriginalLanguage, &movie.Overview,  &movie.ReleaseDate, &movie.Adult, &movie.PosterPath); err != nil {
 			return nil, err
 		}
 		movies = append(movies, &movie)
