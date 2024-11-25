@@ -48,6 +48,7 @@ func main() {
 
 
 	req.Header.Add("accept", "application/json")
+	req.Header.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NjJlNWE2Y2VlOTZlZTU3ZDM1ZWI5N2Y1NTY2YmI1YiIsIm5iZiI6MTczMTY2ODk5Mi44NTk2Mjg0LCJzdWIiOiI2NmQxODk3YTVmNTk0NWUwNjg0NTU2Y2QiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.cEC2Mp8MnYu3vEZTMyvR9GyYrkk1IPd_sl5ckUy7ifw")
 
 	    client := &http.Client{}
 
