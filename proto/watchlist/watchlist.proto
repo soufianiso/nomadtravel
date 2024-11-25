@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package watchlist;
+option go_package = "v1/proto/watchlist";
+
+service Watchlist {
+    rpc ListWatchlist(ListWatchlistRequest) returns (ListWatchlistResponse);
+    rpc AddMovie(AddMovieRequest) returns (AddMovieResponse);
+    rpc RemoveMovie(RemoveMovieRequest) returns (RemoveMovieResponse);
+}
+
+
+// List Wachlist by page
+message ListWatchlistRequest {
+    int32 user_id = 1;        
+    int32 page = 2;        
+    int32 page_size = 3; 
+}
+
+message ListWatchlistResponse {
+    int32 user_id = 1;        
+    int32 total_count = 2; 
+}
+
+// AddMovie to Watchlist
+message AddMovieRequest {
+    int32 user_id = 1;        
+    int32 movie_id = 2;        
+}
+
+message AddMovieResponse {
+    int32 user_id = 1;        
+    int32 movie_id = 2;        
+}
+
+// AddMovie to Watchlist
+message RemoveMovieRequest {
+    int32 user_id = 1;        
+    int32 movie_id = 2;        
+}
+
+message RemoveMovieResponse {
+    int32 user_id = 1;        
+}
