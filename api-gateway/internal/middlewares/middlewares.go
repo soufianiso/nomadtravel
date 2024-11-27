@@ -5,6 +5,7 @@ import (
 	"context"
 	"net/http"
 	"time"
+	"github.com/google/uuid"
 	"log/slog"
 )
 
@@ -57,6 +58,17 @@ func InjectRequestIDMiddleware(next http.Handler) http.Handler {
 }
 
 
+
+func VerifyToken(next http.Handler) http.Handler{
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+		token := r.Header.Get("Authorization")
+
+
+
+		
+
+	})
+}
 
 
 
