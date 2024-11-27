@@ -29,6 +29,7 @@ var (
 	moviesAddr  = flag.String("moviesAddr", configs.Envs.MoviesMicroservicePort, "Address for the Movies microservice")
 )
 
+sou
 func main(){
 	flag.Parse()
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
