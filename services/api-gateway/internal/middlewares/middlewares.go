@@ -47,7 +47,7 @@ func LoggingMiddleware(log *slog.Logger, next http.Handler) http.Handler{
 
 }
 
-func InjectRequestIDMiddleware(next http.Handler) http.Handler {
+func InjectIDMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requestID := uuid.New().String()
 

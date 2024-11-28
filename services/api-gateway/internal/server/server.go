@@ -29,7 +29,7 @@ func NewGatewayServer(log *slog.Logger, userService userpb.UserClient, moviesSer
 	// Top Level Middlewares
 	handler = m.CORSMiddleware(apiRouter)
 	handler = m.LoggingMiddleware(log , handler)
-	handler = m.InjectRequestIDMiddleware(handler)
+	handler = m.InjectIDMiddleware(handler)
 
 	return handler 
 
