@@ -24,12 +24,12 @@ import (
 )
 
 var (
+	//this is in jwt branche
 	gatewayAddr = flag.String("gatewayAddr", configs.Envs.ApiGatewayPort, "Address for the API Gateway service")
 	userAddr    = flag.String("userAddr", configs.Envs.UserMicroservicePort, "Address for the User microservice")
 	moviesAddr  = flag.String("moviesAddr", configs.Envs.MoviesMicroservicePort, "Address for the Movies microservice")
 )
 
-sou
 func main(){
 	flag.Parse()
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
