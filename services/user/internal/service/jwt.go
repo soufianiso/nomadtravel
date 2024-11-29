@@ -3,6 +3,7 @@ package service
 import (
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/soufianiso/nomadtravel/user/configs"
+	"time"
 )
 
 
@@ -10,12 +11,13 @@ import (
 func CreateToken(email string) (string, error){
 	// This secret key I should retrieve from .env
 	secretKey := []byte(configs.Envs.JWTSecret)
-	expired := []byte(string(configs.Envs.JWTExpirationInSeconds))
+	expired := configs.Envs.JWTExpirationInSeconds
 
 	claims := jwt.MapClaims{
 		"Email": email,
-		"exp": expired, 
+		"exp": time.Now().Add(time.Duration(expired) * time.Second).Unix(), // Unix timestamp for expiration
 	}
+	
 
 	// Create the token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
