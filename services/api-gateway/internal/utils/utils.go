@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	jwt "github.com/golang-jwt/jwt/v5"
+	"github.com/soufianiso/nomadtravel/api-gateway/configs"
+	"github.com/soufianiso/nomadtravel/api-gateway/internal/types"
 )
 
 
@@ -31,25 +34,19 @@ func Decode(r *http.Request, v any) (error) {
 	return  nil
 }
 
+func ParseClaims(tokenString string) (error, *types.CustomClaims ) {
+	token, err := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return configs.Envs.JWTSecret, nil
+	})
+	if err != nil {
+		return err , nil
+	}
 
-// func Createjwt(email string, secret string) (string, error){
-// 	signingKey := []byte("secret")	
-// 	claims := jwt.MapClaims{
-// 		"Email": email,
-// 		"exp": time.Now().Add(time.Hour * 72).Unix(),
-// 	}
+	claims := &types.CustomClaims{}
 
-// 	// Create the token with claims
-// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-// 	// Sign the token with your secret key
-// 	tokenString, err := token.SignedString(signingKey)
-
-// 	if err != nil{
-// 		return "" ,err
-// 	}
-
-// 	return tokenString, nil
-// }
-
+	if !token.Valid {
+		return fmt.Errorf("invalid token"), nil
+	}
+	return nil, claims
+}
 

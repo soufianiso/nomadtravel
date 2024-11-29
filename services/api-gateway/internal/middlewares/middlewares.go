@@ -1,12 +1,13 @@
 package middlewares
 
-
 import (
 	"context"
+	"log/slog"
 	"net/http"
 	"time"
+
 	"github.com/google/uuid"
-	"log/slog"
+	"github.com/soufianiso/nomadtravel/api-gateway/internal/utils"
 )
 
 
@@ -59,9 +60,20 @@ func InjectIDMiddleware(next http.Handler) http.Handler {
 
 
 
-func VerifyToken(next http.Handler) http.Handler{
+func AuthMiddleware(log *slog.Logger, next http.Handler) http.Handler{
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
 		token := r.Header.Get("Authorization")
+		err, claims := utils.ParseClaims(token)  
+		if err != nil {
+			log.Error("Failed to signed the token", "details",err)
+			w.WriteHeader(http.StatusNotFound)
+			return 
+		}
+
+		ctx := context.WithValue(r.Context(), "email", claims.Email)
+
+		next.ServeHTTP(w,r.WithContext(ctx))
+
 
 
 

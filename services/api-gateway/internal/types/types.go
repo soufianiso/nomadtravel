@@ -1,6 +1,7 @@
 package types
 
 import (
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type MoviePageNumber int
@@ -25,4 +26,11 @@ type Movie struct {
 type UserLogin struct {
 	Email string `json:"email"`
 	Password string `json:"password"`
+}
+
+
+type CustomClaims struct {
+	Email string `json:"email"`
+	Expiration string `json:"exp"`
+	jwt.RegisteredClaims
 }
