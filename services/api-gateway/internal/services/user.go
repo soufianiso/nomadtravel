@@ -42,7 +42,12 @@ func handleRegister(log *slog.Logger, user userpb.UserClient) http.Handler {
 			return 
 		}
 
-		log.Info("registration success", "requestID", r.Context().Value("requestID") ,"url", r.URL.String(), "user", res.GetId())
+		log.Info("registration success", 
+			"requestID", r.Context().Value("requestID"),
+			"url", r.URL.String(), 
+			"user", res.GetId(),
+			)
+
 		utils.Encode(w, r, 200, fmt.Sprintf("success", res.GetId()) )
 
 	})
