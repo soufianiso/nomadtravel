@@ -1,12 +1,10 @@
 package storage
 
 import (
-	"context"
 	"database/sql"
-	"errors"
 
 	_ "github.com/lib/pq"
-	moviespb "github.com/soufianiso/nomadtravel/movies/api/v1/proto/movies"
+	// moviespb "github.com/soufianiso/nomadtravel/services/proto/api/v1/proto/"
 )
 
 type Storage struct {

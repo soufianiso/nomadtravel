@@ -5,15 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
-	"github.com/soufianiso/nomadtravel/watchlist/configs"
-	"github.com/soufianiso/nomadtravel/watchlist/internal/server"
+	"github.com/soufianiso/nomadtravel/services/watchlist/configs"
+	"github.com/soufianiso/nomadtravel/services/watchlist/internal/server"
 	"net"
 	"os"
 	"sync"
-
-	// "time"
-
-	// "movies/internal/server"
 
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"

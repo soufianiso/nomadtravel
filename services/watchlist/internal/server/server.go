@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"log/slog"
 
-	watchlistpb "github.com/soufianiso/nomadtravel/watchlist/api/watchlist"
-	"github.com/soufianiso/nomadtravel/watchlist/internal/service"
-	"github.com/soufianiso/nomadtravel/watchlist/internal/storage"
+	watchlistpb "github.com/soufianiso/nomadtravel/services/watchlist/api/v1/proto/watchlist"
+	"github.com/soufianiso/nomadtravel/services/watchlist/internal/service"
+	"github.com/soufianiso/nomadtravel/services/watchlist/internal/storage"
 	"google.golang.org/grpc"
 )
 

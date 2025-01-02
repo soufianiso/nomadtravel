@@ -4,8 +4,8 @@ import (
 	"context"
 	"log/slog"
 
-	moviespb "github.com/soufianiso/nomadtravel/movies/api/v1/proto/movies"
-	"github.com/soufianiso/nomadtravel/movies/internal/storage"
+	"github.com/soufianiso/nomadtravel/services/watchlist/api/v1/proto/watchlist"
+	"github.com/soufianiso/nomadtravel/services/watchlist/internal/storage"
 	// "user/internal/types"
 )
 
