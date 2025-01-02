@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.28.3
-// source: proto/watchlist/watchlist.proto
+// source: watchlist/watchlist.proto
 
 package watchlist
 
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Watchlist_ListWatchlist_FullMethodName = "/watchlist.Watchlist/ListWatchlist"
-	Watchlist_AddMovie_FullMethodName      = "/watchlist.Watchlist/AddMovie"
-	Watchlist_RemoveMovie_FullMethodName   = "/watchlist.Watchlist/RemoveMovie"
+	Watchlist_ListWatchlist_FullMethodName       = "/watchlist.Watchlist/ListWatchlist"
+	Watchlist_AddToWatchlist_FullMethodName      = "/watchlist.Watchlist/AddToWatchlist"
+	Watchlist_RemoveFromWatchlist_FullMethodName = "/watchlist.Watchlist/RemoveFromWatchlist"
 )
 
 // WatchlistClient is the client API for Watchlist service.
@@ -29,8 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WatchlistClient interface {
 	ListWatchlist(ctx context.Context, in *ListWatchlistRequest, opts ...grpc.CallOption) (*ListWatchlistResponse, error)
-	AddMovie(ctx context.Context, in *AddMovieRequest, opts ...grpc.CallOption) (*AddMovieResponse, error)
-	RemoveMovie(ctx context.Context, in *RemoveMovieRequest, opts ...grpc.CallOption) (*RemoveMovieResponse, error)
+	AddToWatchlist(ctx context.Context, in *AddToWatchlistRequest, opts ...grpc.CallOption) (*AddToWatchlistResponse, error)
+	RemoveFromWatchlist(ctx context.Context, in *RemoveFromWatchlistRequest, opts ...grpc.CallOption) (*RemoveFromWatchlistResponse, error)
 }
 
 type watchlistClient struct {
@@ -51,20 +51,20 @@ func (c *watchlistClient) ListWatchlist(ctx context.Context, in *ListWatchlistRe
 	return out, nil
 }
 
-func (c *watchlistClient) AddMovie(ctx context.Context, in *AddMovieRequest, opts ...grpc.CallOption) (*AddMovieResponse, error) {
+func (c *watchlistClient) AddToWatchlist(ctx context.Context, in *AddToWatchlistRequest, opts ...grpc.CallOption) (*AddToWatchlistResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(AddMovieResponse)
-	err := c.cc.Invoke(ctx, Watchlist_AddMovie_FullMethodName, in, out, cOpts...)
+	out := new(AddToWatchlistResponse)
+	err := c.cc.Invoke(ctx, Watchlist_AddToWatchlist_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *watchlistClient) RemoveMovie(ctx context.Context, in *RemoveMovieRequest, opts ...grpc.CallOption) (*RemoveMovieResponse, error) {
+func (c *watchlistClient) RemoveFromWatchlist(ctx context.Context, in *RemoveFromWatchlistRequest, opts ...grpc.CallOption) (*RemoveFromWatchlistResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RemoveMovieResponse)
-	err := c.cc.Invoke(ctx, Watchlist_RemoveMovie_FullMethodName, in, out, cOpts...)
+	out := new(RemoveFromWatchlistResponse)
+	err := c.cc.Invoke(ctx, Watchlist_RemoveFromWatchlist_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,8 +76,8 @@ func (c *watchlistClient) RemoveMovie(ctx context.Context, in *RemoveMovieReques
 // for forward compatibility.
 type WatchlistServer interface {
 	ListWatchlist(context.Context, *ListWatchlistRequest) (*ListWatchlistResponse, error)
-	AddMovie(context.Context, *AddMovieRequest) (*AddMovieResponse, error)
-	RemoveMovie(context.Context, *RemoveMovieRequest) (*RemoveMovieResponse, error)
+	AddToWatchlist(context.Context, *AddToWatchlistRequest) (*AddToWatchlistResponse, error)
+	RemoveFromWatchlist(context.Context, *RemoveFromWatchlistRequest) (*RemoveFromWatchlistResponse, error)
 	mustEmbedUnimplementedWatchlistServer()
 }
 
@@ -91,11 +91,11 @@ type UnimplementedWatchlistServer struct{}
 func (UnimplementedWatchlistServer) ListWatchlist(context.Context, *ListWatchlistRequest) (*ListWatchlistResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListWatchlist not implemented")
 }
-func (UnimplementedWatchlistServer) AddMovie(context.Context, *AddMovieRequest) (*AddMovieResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddMovie not implemented")
+func (UnimplementedWatchlistServer) AddToWatchlist(context.Context, *AddToWatchlistRequest) (*AddToWatchlistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddToWatchlist not implemented")
 }
-func (UnimplementedWatchlistServer) RemoveMovie(context.Context, *RemoveMovieRequest) (*RemoveMovieResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveMovie not implemented")
+func (UnimplementedWatchlistServer) RemoveFromWatchlist(context.Context, *RemoveFromWatchlistRequest) (*RemoveFromWatchlistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveFromWatchlist not implemented")
 }
 func (UnimplementedWatchlistServer) mustEmbedUnimplementedWatchlistServer() {}
 func (UnimplementedWatchlistServer) testEmbeddedByValue()                   {}
@@ -136,38 +136,38 @@ func _Watchlist_ListWatchlist_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Watchlist_AddMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddMovieRequest)
+func _Watchlist_AddToWatchlist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddToWatchlistRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WatchlistServer).AddMovie(ctx, in)
+		return srv.(WatchlistServer).AddToWatchlist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Watchlist_AddMovie_FullMethodName,
+		FullMethod: Watchlist_AddToWatchlist_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WatchlistServer).AddMovie(ctx, req.(*AddMovieRequest))
+		return srv.(WatchlistServer).AddToWatchlist(ctx, req.(*AddToWatchlistRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Watchlist_RemoveMovie_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RemoveMovieRequest)
+func _Watchlist_RemoveFromWatchlist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveFromWatchlistRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(WatchlistServer).RemoveMovie(ctx, in)
+		return srv.(WatchlistServer).RemoveFromWatchlist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Watchlist_RemoveMovie_FullMethodName,
+		FullMethod: Watchlist_RemoveFromWatchlist_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WatchlistServer).RemoveMovie(ctx, req.(*RemoveMovieRequest))
+		return srv.(WatchlistServer).RemoveFromWatchlist(ctx, req.(*RemoveFromWatchlistRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -184,14 +184,14 @@ var Watchlist_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Watchlist_ListWatchlist_Handler,
 		},
 		{
-			MethodName: "AddMovie",
-			Handler:    _Watchlist_AddMovie_Handler,
+			MethodName: "AddToWatchlist",
+			Handler:    _Watchlist_AddToWatchlist_Handler,
 		},
 		{
-			MethodName: "RemoveMovie",
-			Handler:    _Watchlist_RemoveMovie_Handler,
+			MethodName: "RemoveFromWatchlist",
+			Handler:    _Watchlist_RemoveFromWatchlist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/watchlist/watchlist.proto",
+	Metadata: "watchlist/watchlist.proto",
 }
