@@ -21,7 +21,7 @@ func NewGatewayServer(log *slog.Logger, userService userpb.UserClient, moviesSer
 
 	services.SetUser(apiRouter, log, userService)		
 	services.SetMovies(apiRouter, log, moviesService)		
-	// services.SetAuth(apiRouter, log, moviesService)		
+	services.SetWatchlist(apiRouter, log, moviesService)		
 	
 
 	var handler http.Handler
