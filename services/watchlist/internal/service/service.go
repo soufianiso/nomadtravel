@@ -30,7 +30,7 @@ func NewMoviesService(log *slog.Logger , store storage.Store) *MoviesService{
 func (s *MoviesService) ListMovies(ctx context.Context, req *moviespb.ListMoviesRequest) (*moviespb.ListMoviesResponse, error) {
 	movies, err := s.store.GetMovies(ctx, req)
 	if err !=  nil{
-		s.log.Error("can't retrieve movies","page",req.GetPage(), "Err",err)
+		s.log.Error("can't retrieve movies","Details",err)
 		return nil, err
 	}
 
