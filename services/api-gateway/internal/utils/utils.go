@@ -35,18 +35,20 @@ func Decode(r *http.Request, v any) (error) {
 }
 
 func ParseClaims(tokenString string) (error, *types.CustomClaims ) {
-	token, err := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return configs.Envs.JWTSecret, nil
-	})
+	var claimsturct types.CustomClaims
+	 token, err := jwt.ParseWithClaims(tokenString, &claimsturct , func(token *jwt.Token) (interface{}, error) {
+	  return []byte(configs.Envs.JWTSecret), nil
+	 })
+
 	if err != nil {
 		return err , nil
 	}
 
-	claims := &types.CustomClaims{}
-
-	if !token.Valid {
-		return fmt.Errorf("invalid token"), nil
+	claims, ok := token.Claims.(*types.CustomClaims)
+	if !ok || !token.Valid{
+		return fmt.Errorf("invalid claims"), nil
 	}
+
 	return nil, claims
 }
 
