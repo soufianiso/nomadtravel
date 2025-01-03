@@ -13,6 +13,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
+
 )
 
 var (
@@ -36,7 +37,7 @@ func main(){
 	// litening on port 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s",*serverAddr))
 	if err != nil{
-		log.Error("error to open connection maybe the port is being used","Details",err)
+		log.Error("Failed connection maybe the port is being used","Details",err)
 	}
 	
 
@@ -44,16 +45,19 @@ func main(){
 		*postgresHost, *postgresPort, *postgresUser, *postgresPassword, *postgresName)
 
 	db, err := sql.Open("postgres",conn)
-	if err != nil{
+	if err != nil {
 		log.Error("can't connect to database s","Details",err)
 		os.Exit(1)
 	}
 
-	if err = db.Ping() ;  err != nil{
+	if err = db.Ping(); err != nil{
 		log.Error("can't ping postgres","Details",err)
 	}
 
-	log.Info("postgres connected successfully on port ", "success", fmt.Sprintf("%s",*postgresPort))
+	log.Info(
+		"postgres connected successfully on port", 
+		"Details", fmt.Sprintf("%s",*postgresPort),
+		)
 
 	grpcConn := grpc.NewServer()
 	s := server.NewServer(log, db, grpcConn) 
@@ -63,9 +67,10 @@ func main(){
 	wg.Add(1)
 	go func(){
 		defer wg.Done()
-		log.Info("server listening on port","server Address",*serverAddr)
+		log.Info("server listening on port", "Details", *serverAddr)
 		if err := s.Serve(lis); err != nil{
-			log.Error("Failed to serve","Details",err)
+			log.Error("Failed to serve", "Details", err)
+
 		}
 	}()
 	wg.Wait()
