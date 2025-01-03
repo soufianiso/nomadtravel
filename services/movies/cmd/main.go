@@ -48,12 +48,12 @@ func main(){
 
 	db, err := sql.Open("postgres",conn)
 	if err != nil{
-		log.Error("can't connect to database s","Error",err)
+		log.Error("can't connect to database s","Details",err)
 		os.Exit(1)
 	}
 
 	if err = db.Ping() ;  err != nil{
-		log.Error("can't ping postgres",)
+		log.Error("can't ping postgres","Details",err)
 	}
 
 	log.Info("postgres connected successfully on port ", "success", fmt.Sprintf("%s",*postgresPort))
@@ -68,7 +68,7 @@ func main(){
 		defer wg.Done()
 		log.Info("server listening on port","server Address",*serverAddr)
 		if err := s.Serve(lis); err != nil{
-			log.Error("Failed to serve","Error",err)
+			log.Error("Failed to serve","Details",err)
 		}
 	}()
 	wg.Wait()
