@@ -31,6 +31,5 @@ type UserLogin struct {
 
 type CustomClaims struct {
 	Email string `json:"email"`
-	Expiration string `json:"exp"`
 	jwt.RegisteredClaims
 }
