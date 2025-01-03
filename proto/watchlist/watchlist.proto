@@ -5,15 +5,14 @@ option go_package = "v1/proto/watchlist";
 
 service Watchlist {
     rpc ListWatchlist(ListWatchlistRequest) returns (ListWatchlistResponse);
-    rpc AddMovie(AddMovieRequest) returns (AddMovieResponse);
-    rpc RemoveMovie(RemoveMovieRequest) returns (RemoveMovieResponse);
+    rpc AddToWatchlist(AddToWatchlistRequest) returns (AddToWatchlistResponse);
+    rpc RemoveFromWatchlist(RemoveFromWatchlistRequest) returns (RemoveFromWatchlistResponse);
 }
 
 
 // List Wachlist by page
 message ListWatchlistRequest {
     int32 user_id = 1;        
-    int32 page = 2;        
     int32 page_size = 3; 
 }
 
@@ -23,22 +22,23 @@ message ListWatchlistResponse {
 }
 
 // AddMovie to Watchlist
-message AddMovieRequest {
+message AddToWatchlistRequest {
     int32 user_id = 1;        
     int32 movie_id = 2;        
 }
 
-message AddMovieResponse {
+message AddToWatchlistResponse {
     int32 user_id = 1;        
     int32 movie_id = 2;        
 }
 
 // AddMovie to Watchlist
-message RemoveMovieRequest {
+message RemoveFromWatchlistRequest {
     int32 user_id = 1;        
     int32 movie_id = 2;        
 }
 
-message RemoveMovieResponse {
+message RemoveFromWatchlistResponse {
     int32 user_id = 1;        
+    int32 movie_id = 2;        
 }
