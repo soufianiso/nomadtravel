@@ -24,7 +24,7 @@ func SetMovies(r *mux.Router, logger *slog.Logger, moviesService moviespb.Movies
 func handleMoviesByPage(log *slog.Logger, movies moviespb.MoviesClient) http.Handler {
 	log = log.With("handler","HandleMoviesByPage")
 
-	return http.HandlerFunc(func(w http.ResponseWriter,  r *http.Request){
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
 		log = log.With("requestID",r.Context().Value("requestID"))
 
 		q := r.URL.Query().Get("page")
@@ -36,35 +36,27 @@ func handleMoviesByPage(log *slog.Logger, movies moviespb.MoviesClient) http.Han
 		}
 
 		page := int32(idstr)
-		ctx, _ := context.WithTimeout(context.Background(),  time.Second * 3)
+		ctx, _ := context.WithTimeout(context.Background(), time.Second * 3)
 		res , err := movies.ListMovies(ctx, &moviespb.ListMoviesRequest{
 			Page: page,
 			PageSize: types.MovieSize,
 		} )
 
 		if err != nil{
-			log.Error("Failed to retrieve movies", err)
-			utils.Encode(w,r, 404, map[string]string{"msg":"no movies"})
+			log.Error("Failed to retrieve movies","Details",err)
+			utils.Encode(w, r, 404, map[string]string{"msg":"no movies"})
 			return 
 		}
 
 		err = utils.Encode(w, r, 200, res) 
 		if err != nil{
-			log.Error("Failed to Encode movies",  err)
+			log.Error("Failed to Encode movies","Details",err)
 			return
 		}
 
 		log.Info("list movies successfully")
 	})
 }
-
-// func handleMoviesByPage(log *slog.Logger,  movies moviespb.MoviesClient) http.Handler{
-// 	return http.HandlerFunc(func(w http.ResponseWriter,r *http.Request){
-
-
-// 	})
-// }
-
 
 func handleMovieByPage(log *slog.Logger,  movies moviespb.MoviesClient) http.Handler{
 

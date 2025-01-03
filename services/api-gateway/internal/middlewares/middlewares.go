@@ -65,7 +65,7 @@ func AuthMiddleware(log *slog.Logger, next http.Handler) http.Handler{
 		token := r.Header.Get("Authorization")
 		err, claims := utils.ParseClaims(token)  
 		if err != nil {
-			log.Error("Failed to signed the token", "details",err)
+			log.Error("Failed to signed the token","Details",err)
 			w.WriteHeader(http.StatusNotFound)
 			return 
 		}

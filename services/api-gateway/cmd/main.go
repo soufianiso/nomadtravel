@@ -38,13 +38,13 @@ func main(){
 
 	userConn, err := grpc.NewClient(fmt.Sprintf(":%s",*userAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Error("Can't init gRPC client", "Client", "User", "Error",err)
+		log.Error("Can't init gRPC client","Details",err)
 	}
 	defer userConn.Close()
 
 	moviesConn, err := grpc.NewClient(fmt.Sprintf(":%s",*moviesAddr), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Error("Can't init gRPC client", "Client", "Movies", "Error",err)
+		log.Error("Can't init gRPC client","Details",err)
 	}
 	defer moviesConn.Close()
 
@@ -83,7 +83,7 @@ func main(){
 
 		// Gracefully shut down the server
 		if err := app.Shutdown(shutdownCtx); err != nil {
-			log.Error("can't shutdown the server", "address", app.Addr)
+			log.Error("can't shutdown the server","Details",err)
 		}
 
 		log.Info("the Server Shute Down Successfully", "address", app.Addr)

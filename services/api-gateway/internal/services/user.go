@@ -24,7 +24,7 @@ func handleRegister(log *slog.Logger, user userpb.UserClient) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var u types.UserRegister
 		if err := utils.Decode(r, &u); err != nil {
-			log.Error("Failed to Decode json fields", "error", err)
+			log.Error("Failed to Decode json fields","Details",err)
 			return
 		}
 
@@ -38,7 +38,7 @@ func handleRegister(log *slog.Logger, user userpb.UserClient) http.Handler {
 			Password:  u.Password,
 		})
 		if err != nil {
-			log.Error("message from the microservice: %v", err)
+			log.Error("message from the microservice: %v","Details",err)
 			return 
 		}
 
@@ -59,7 +59,7 @@ func handleLogin(log *slog.Logger, user userpb.UserClient) http.Handler {
 		var u types.UserLogin
 
 		if err := utils.Decode(r, &u) ; err != nil{
-			log.Error("Failed to Decode json fields", "error", err)
+			log.Error("Failed to Decode json fields","Details",err)
 			utils.Encode(w, r, 200, map[string]string{"Error": "incorrect email or password"})
 			return
 		}
@@ -74,7 +74,7 @@ func handleLogin(log *slog.Logger, user userpb.UserClient) http.Handler {
 
 		if err != nil{
 			// failed to retrieve the jwt token
-			log.Error("message from the microservice: %v", "Error", err)
+			log.Error("message from the microservice: %v","Details",err)
 			utils.Encode(w, r, 200, map[string]string{"Error": "incorrect email or password"})
 			return 
 		}
