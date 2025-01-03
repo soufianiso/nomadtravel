@@ -1,7 +1,9 @@
 package types
 
-import(
+import (
 	"time"
+
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type User struct {
@@ -16,7 +18,10 @@ type User struct {
  
 
 
-
+type CustomClaims struct {
+	Email string `json:"email"`
+	jwt.RegisteredClaims
+}
 
 
 
