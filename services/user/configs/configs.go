@@ -36,7 +36,7 @@ func initConfig() Config {
 		DB_HOST:				getEnv("DB_HOST", "127.00.1"),
 		DB_PORT:				getEnv("DB_PORT", "5432"),
 		DBName:                 getEnv("DB_NAME", "postgres"),
-		JWTSecret:              getEnv("JWT_SECRET", "secret_key"),
+		JWTSecret:              getEnv("JWT_SECRET", "example"),
 		JWTExpirationInSeconds: getEnvAsInt("JWT_EXPIRATION_IN_SECONDS", 3600 * 24 * 7),
 	}
 }
