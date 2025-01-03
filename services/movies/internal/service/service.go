@@ -11,40 +11,30 @@ import (
 
 type MoviesService struct {
 	moviespb.UnimplementedMoviesServer
-	log *slog.Logger 
+	log *slog.Logger
 	// interface of storage
 	store storage.Store
 }
 
-
-
-
-func NewMoviesService(log *slog.Logger , store storage.Store) *MoviesService{
+func NewMoviesService(log *slog.Logger, store storage.Store) *MoviesService {
 	return &MoviesService{
-		log : log,
+		log:   log,
 		store: store,
-
 	}
 }
 
 func (s *MoviesService) ListMovies(ctx context.Context, req *moviespb.ListMoviesRequest) (*moviespb.ListMoviesResponse, error) {
 	movies, err := s.store.GetMovies(ctx, req)
-	if err !=  nil{
-		s.log.Error("can't retrieve movies","page",req.GetPage(), "Err",err)
+	if err != nil {
+		s.log.Error("can't retrieve movies","Details",err)
 		return nil, err
 	}
 
-	s.log.Info("retrieve movies page succefully","page", req.GetPage())
-	return &moviespb.ListMoviesResponse{ Movies: movies} , err
+	s.log.Info(
+		"retrieve movies page succefully",
+		"page", req.GetPage(),
+	)
 
+	return &moviespb.ListMoviesResponse{Movies: movies}, err
 
 }
-
-
-
-
-
-
-
-
-

@@ -39,7 +39,7 @@ func main(){
 	// litening on port 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s",*serverAddr))
 	if err != nil{
-		log.Error("error to open connection maybe the port is being used","Error",err)
+		log.Error("error to open connection maybe the port is being used","Details",err)
 	}
 	
 
