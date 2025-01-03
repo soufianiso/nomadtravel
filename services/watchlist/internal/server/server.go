@@ -12,12 +12,12 @@ import (
 
 func NewServer(log *slog.Logger ,db *sql.DB, grpcServer *grpc.Server) *grpc.Server{
 	// initialize new storage
-	moviesStore := storage.NewMoviesStorage(db)
+	watchlistStore := storage.NewWatchlistStorage(db)
 
-	// initiliaze new movies service 
-	moviesService := service.NewMoviesService(log, moviesStore)
+	// initiliaze new service
+	watchlistService := service.NewWachlistService(log, watchlistStore)
 
-	// watchlistpb.RegisterWachlitServer here
+	watchlistpb.RegisterWatchlistServer(grpcServer, watchlistService)
 
 	return grpcServer
 }
